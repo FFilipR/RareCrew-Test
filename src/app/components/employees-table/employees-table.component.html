@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Total Time in Month</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let employee of employees">
+          <td *ngIf="employee.isEdit; else isNotEditEmployeeName">
+              <input type = "text" [(ngModel)]="employee.EmployeeName"/>
+          </td>
+          <ng-template #isNotEditEmployeeName>
+            <td>
+              {{employee.EmployeeName}}
+            </td>
+          </ng-template>
+
+        <td *ngIf="employee.isEdit; else isNotEditTotalTimeInMonth">
+              <input type = "text" [(ngModel)]="employee.TotalTimeInMonth"/>
+        </td>
+            <ng-template #isNotEditTotalTimeInMonth>
+              <td>
+                {{employee.TotalTimeInMonth}} hrs
+              </td>
+            </ng-template>
+
+      <td *ngIf="employee.isEdit; else isNotEditMode">
+          <button class="btn" (click)="saveEmployee(employee)"> Save </button>
+          <button class="btn" (click)="employee.isEdit = false"><i class="fa fa-close"></i></button>
+      </td>
+      <ng-template #isNotEditMode>
+        <td>
+          <button (click)="onEdit(employee)"> Edit </button>
+        </td>
+      </ng-template>
+    </tr>
+  </table>
+</div>
+
