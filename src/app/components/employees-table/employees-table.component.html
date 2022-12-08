@@ -7,7 +7,10 @@
       <th>Total Time in Month</th>
       <th>Actions</th>
     </tr>
-    <tr *ngFor="let employee of employees">
+    <tr *ngFor="let employee of employees" [ngClass]="
+    {
+        'tooLow': employee.TotalTimeInMonth < 100
+    }">
           <td *ngIf="employee.isEdit; else isNotEditEmployeeName">
               <input type = "text" [(ngModel)]="employee.EmployeeName"/>
           </td>
@@ -32,10 +35,9 @@
       </td>
       <ng-template #isNotEditMode>
         <td>
-          <button (click)="onEdit(employee)"> Edit </button>
+          <a (click)="onEdit(employee)"> <u> Edit </u> </a>
         </td>
       </ng-template>
     </tr>
   </table>
 </div>
-

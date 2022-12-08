@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Employee} from "../models/Employee";
-import {Observable, pipe, throwError as observableThrowError} from "rxjs";
-import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -16,19 +14,12 @@ export class EmployeeService {
 
   getAllEmployees()
   {
-    return this.http
-      .get<Employee[]>(this.employeesUrl)
-      .pipe(map(data => data), catchError(this.handleError));
+    return this.http.get<Employee[]>(this.employeesUrl);
   }
 
-  getEmployee(id: number): Observable<Employee | null | undefined> {
+/*  getEmployee(id: number): Observable<Employee | null | undefined> {
     return this.getAllEmployees().pipe(
       map(employees => employees.find(employee => employee.Id === id))
     );
-  }
-
-  private handleError(res: HttpErrorResponse | any) {
-    console.error(res.error || res.body.error);
-    return observableThrowError(res.error || 'Server error');
-  }
+  }*/
 }

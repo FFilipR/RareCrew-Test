@@ -11,22 +11,28 @@ export class EmployeesTableComponent implements OnInit {
 
   employees: Employee[] = [];
 
-  constructor(
-    private employeeService: EmployeeService)
-  {}
+  constructor(private employeeService: EmployeeService) {}
 
-  ngOnInit() {
+  ngOnInit(): void
+  {
     this.loadEmployees();
   }
 
-  loadEmployees()
+  private loadEmployees()
   {
-    this.employeeService
-      .getAllEmployees()
-      .subscribe(employees => this.employees = employees.slice(5, 9));
+    this.employeeService.getAllEmployees().subscribe((employees) =>
+    {
+      employees.forEach(employee =>
+      {
+        employee.TotalTimeInMonth = this.calculateTimeInMonth(employee);
+      })
+        this.employees = this.filterEmployeesAndCalculateTotalTimeInMonth(employees)
+                             .sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth);
+    })
   }
 
-  onEdit(item: any) {
+   onEdit(item: any)
+   {
     // only one element can be edited at the time
     this.employees.forEach(employee =>
     {
@@ -34,24 +40,49 @@ export class EmployeesTableComponent implements OnInit {
     })
 
     item.isEdit = true;
-  }
+   }
 
   saveEmployee(employee: Employee)
   {
     let index = this.employees.findIndex(obj => obj.Id == employee.Id);
     this.employees[index].EmployeeName = employee.EmployeeName;
     this.employees[index].TotalTimeInMonth = employee.TotalTimeInMonth;
-    debugger
+
     employee.isEdit = false;
   }
 
-  calculateTotalTimeInMonth(employee: Employee): number
+  calculateTimeInMonth(employee: Employee)
   {
-    const date1 = new Date (employee.EndTimeUtc)
-    const date2 = new Date (employee.StarTimeUtc)
+    const date1 = new Date (employee.EndTimeUtc);
+    const date2 = new Date (employee.StarTimeUtc);
 
-    let difference_in_time = date1.getTime() - date2.getTime()
+    let difference_in_time = date1.getTime() - date2.getTime();
     return Math.round(difference_in_time / 1000 / 60 / 60);
   }
-}
 
+  filterEmployeesAndCalculateTotalTimeInMonth(employees: Employee[])
+  {
+    interface Output { [key: string]: number; }
+    const uniqueEmployees: Output = { };
+
+   for (let employee of employees)
+   {
+     if (uniqueEmployees[employee.EmployeeName])
+     {
+       uniqueEmployees[employee.EmployeeName] += employee.TotalTimeInMonth;
+     }
+     else
+     {
+       uniqueEmployees[employee.EmployeeName] = employee.TotalTimeInMonth;
+     }
+   }
+
+   return Object.keys(uniqueEmployees).map((key) =>
+   {
+     return {
+       EmployeeName: key,
+       TotalTimeInMonth: uniqueEmployees[key]
+     }  as Employee
+   })
+  }
+}

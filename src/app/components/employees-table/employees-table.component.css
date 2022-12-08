@@ -13,3 +13,11 @@ td, th {
 th {
   background-color: #dddddd;
 }
+
+.tooLow {
+  background-color: rgba(246, 135, 131, 0.77);
+}
+
+a {
+  color: rgb(51, 135, 204);
+}
