@@ -1,17 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {EmployeeService} from "../../services/employee.service";
 import {Employee} from "../../models/Employee";
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-employee-table',
   templateUrl: './employees-table.component.html',
   styleUrls: ['./employees-table.component.css']
 })
-export class EmployeesTableComponent implements OnInit {
+export class EmployeesTableComponent implements OnInit
+{
 
-  employees: Employee[] = [];
+  employees: any[];
+  originalEmployees: Employee[] = [];
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(private employeeService: EmployeeService) {
+  }
 
   ngOnInit(): void
   {
@@ -26,8 +30,10 @@ export class EmployeesTableComponent implements OnInit {
       {
         employee.TotalTimeInMonth = this.calculateTimeInMonth(employee);
       })
+
         this.employees = this.filterEmployeesAndCalculateTotalTimeInMonth(employees)
-                             .sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth);
+                             .sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth)
+                             .filter(element => element.EmployeeName !== "null");
     })
   }
 
@@ -39,15 +45,26 @@ export class EmployeesTableComponent implements OnInit {
       employee.isEdit = false;
     })
 
-    item.isEdit = true;
+     this.originalEmployees = cloneDeep(this.employees)
+
+     item.isEdit = true;
    }
 
-  saveEmployee(employee: Employee)
+  onSave(employee: Employee)
   {
-    let index = this.employees.findIndex(obj => obj.Id == employee.Id);
+    let index = this.employees.findIndex(obj => obj.EmployeeName == employee.EmployeeName);
+
     this.employees[index].EmployeeName = employee.EmployeeName;
     this.employees[index].TotalTimeInMonth = employee.TotalTimeInMonth;
 
+    this.employees.sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth)
+
+    employee.isEdit = false;
+  }
+
+  onCancel(employee: any)
+  {
+    this.employees = this.originalEmployees;
     employee.isEdit = false;
   }
 
