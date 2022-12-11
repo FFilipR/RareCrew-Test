@@ -37,8 +37,9 @@
           </ng-template>
 
     <td class="editCell" *ngIf="employee.isEdit; else isNotEditMode">
-        <button id="saveBtn" type="button"  class="btn" (click)="onSave(employee)"> Save </button>
-        <button id="closeBtn" type="button" class="btn" (click)="onCancel(employee)"><i class="fa fa-close"></i></button>
+        <button type="button" class="btn" (click)="onSave(employee)"> Save </button>
+        <button type="button" class="btn" (click)="onDelete(employee)">Delete</button>
+        <button type="button" class="btn" (click)="onCancel(employee)"><i class="fa fa-close"></i></button>
     </td>
     <ng-template #isNotEditMode>
       <td>

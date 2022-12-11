@@ -6,7 +6,6 @@ import {EmployeesTableComponent} from "./components/employees-table/employees-ta
 const routes: Routes = [
   {path: '', component: EmployeesTableComponent },
   {path: 'employees-table', component: EmployeesTableComponent},
-
 ];
 
 @NgModule({

@@ -68,6 +68,19 @@ export class EmployeesTableComponent implements OnInit
     employee.isEdit = false;
   }
 
+  onDelete(employee: Employee): void
+  {
+    this._employees = this.originalEmployees;
+
+    let index = this._employees.findIndex(obj => obj.EmployeeName == employee.EmployeeName);
+
+    if (index > -1) {
+      this._employees.splice(index, 1);
+    }
+
+    employee.isEdit = false;
+  }
+
   private calculateTimeInMonth(employee: Employee)
   {
     const date1 = new Date (employee.EndTimeUtc);
