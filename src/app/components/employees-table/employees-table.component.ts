@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EmployeeService} from "../../services/employee.service";
 import {Employee} from "../../models/Employee";
 import {cloneDeep} from 'lodash';
@@ -10,7 +10,7 @@ import {cloneDeep} from 'lodash';
 })
 export class EmployeesTableComponent implements OnInit
 {
-  employees: Employee[];
+   _employees: Employee[];
   originalEmployees: Employee[];
 
   constructor(private employeeService: EmployeeService) {}
@@ -30,7 +30,7 @@ export class EmployeesTableComponent implements OnInit
         employee.TotalTimeInMonth = this.calculateTimeInMonth(employee);
       })
 
-        this.employees = this.filterEmployeesAndCalculateTotalTimeInMonth(employees)
+        this._employees = this.filterEmployeesAndCalculateTotalTimeInMonth(employees)
                              .sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth)
                              .filter(element => element.EmployeeName !== "null");
     })
@@ -39,35 +39,36 @@ export class EmployeesTableComponent implements OnInit
    onEdit(item: any): void
    {
       // only one element can be edited at the time
-    this.employees.forEach(employee =>
+    this._employees.forEach(employee =>
     {
       employee.isEdit = false;
     })
 
-     this.originalEmployees = cloneDeep(this.employees)
+     this.originalEmployees = cloneDeep(this._employees)
 
      item.isEdit = true;
    }
 
   onSave(employee: Employee): void
   {
-    let index = this.employees.findIndex(obj => obj.EmployeeName == employee.EmployeeName);
+    let index = this._employees.findIndex(obj => obj.EmployeeName == employee.EmployeeName);
+    this._employees = this.originalEmployees;
 
-    this.employees[index].EmployeeName = employee.EmployeeName;
-    this.employees[index].TotalTimeInMonth = employee.TotalTimeInMonth;
-
-    this.employees.sort((a,b) => b.TotalTimeInMonth - a.TotalTimeInMonth)
+    this._employees[index].EmployeeName = employee.EmployeeName;
+    this._employees[index].TotalTimeInMonth = employee.TotalTimeInMonth;
+    this._employees.sort((a, b) => b.TotalTimeInMonth - a.TotalTimeInMonth)
 
     employee.isEdit = false;
+
   }
 
-  onCancel(employee: any): void
+  onCancel(employee: Employee): void
   {
-    this.employees = this.originalEmployees;
+    this._employees = this.originalEmployees;
     employee.isEdit = false;
   }
 
-  calculateTimeInMonth(employee: Employee)
+  private calculateTimeInMonth(employee: Employee)
   {
     const date1 = new Date (employee.EndTimeUtc);
     const date2 = new Date (employee.StarTimeUtc);
@@ -76,7 +77,7 @@ export class EmployeesTableComponent implements OnInit
     return Math.round(difference_in_time / 1000 / 60 / 60);
   }
 
-  filterEmployeesAndCalculateTotalTimeInMonth(employees: Employee[])
+  private filterEmployeesAndCalculateTotalTimeInMonth(employees: Employee[])
   {
     interface Output { [key: string]: number; }
     const uniqueEmployees: Output = { };

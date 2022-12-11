@@ -6,7 +6,6 @@
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
-
 <h1>Table of Employees</h1>
 
 <table>
@@ -15,7 +14,7 @@
     <th>Total Time in Month</th>
     <th>Actions</th>
   </tr>
-  <tr *ngFor="let employee of employees" [ngClass]="
+  <tr *ngFor="let employee of _employees" [ngClass]="
   {
       'tooLow': employee.TotalTimeInMonth < 100
   }">
@@ -29,7 +28,7 @@
         </ng-template>
 
       <td *ngIf="employee.isEdit; else isNotEditTotalTimeInMonth">
-            <input type = "text" [(ngModel)]="employee.TotalTimeInMonth"/>
+            <input type = "number" [(ngModel)]="employee.TotalTimeInMonth"/>
       </td>
           <ng-template #isNotEditTotalTimeInMonth>
             <td>
@@ -51,4 +50,4 @@
 
 <br>
 
-<app-total-time-worked-pie-chart [inputEmployees]="this.employees"></app-total-time-worked-pie-chart>
+<app-total-time-worked-pie-chart [inputEmployees]="this._employees"></app-total-time-worked-pie-chart>

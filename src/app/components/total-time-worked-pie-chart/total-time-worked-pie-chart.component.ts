@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, ViewChild} from '@angular/core';
 import {Chart} from "chart.js/auto";
 import {Employee} from "../../models/Employee";
 
@@ -33,11 +33,13 @@ export class TotalTimeWorkedPieChartComponent implements OnChanges
     this.employeeTotalTimeWorked = this.toPercentage(this.employeeTotalTimeWorked)
 
     this.pieChartBrowser();
-    this.updatePieChart(this.pieChart,this.employeeNames,this.employeeTotalTimeWorked);
   }
 
-  pieChartBrowser(): void
+  private pieChartBrowser(): void
   {
+    if(this.pieChart != null)
+      this.pieChart.destroy();
+
     this.canvas = this.pieCanvas.nativeElement;
     this.ctx = this.canvas.getContext('2d');
 
@@ -92,30 +94,20 @@ export class TotalTimeWorkedPieChartComponent implements OnChanges
       });
   }
 
-   toPercentage(numbers: number[])
+   private toPercentage(numbers: number[])
    {
+     debugger
      const sum = numbers.reduce((accumulator, current) =>
      {
        return accumulator + current;
      }, 0);
 
      numbers = numbers.map(number => number / sum * 100);
-
+    debugger
      for (let f=0; f < numbers.length; f++)
      {
        numbers[f] = +numbers[f].toFixed(2);
      }
      return numbers
   }
-
-  updatePieChart(chart: Chart, names: String[], hours: number[])
-  {
-    chart.data.labels = names;
-    chart.data.datasets.forEach((dataset) =>
-    {
-    dataset.data = hours;
-    });
-    chart.update();
-  }
-
 }

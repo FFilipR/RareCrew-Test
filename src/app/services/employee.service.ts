@@ -15,10 +15,4 @@ export class EmployeeService {
   {
     return this.http.get<Employee[]>(this.employeesUrl);
   }
-
-/*  getEmployee(id: number): Observable<Employee | null | undefined> {
-    return this.getAllEmployees().pipe(
-      map(employees => employees.find(employee => employee.Id === id))
-    );
-  }*/
 }
