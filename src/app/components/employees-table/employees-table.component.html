@@ -1,5 +1,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+
+<h1>Table of Employees</h1>
+
 <table>
   <tr>
     <th>Name</th>
@@ -28,9 +37,9 @@
             </td>
           </ng-template>
 
-    <td *ngIf="employee.isEdit; else isNotEditMode">
-        <button type="button"  class="btn" (click)="onSave(employee)"> Save </button>
-        <button type="button" class="btn" (click)="onCancel(employee)"><i class="fa fa-close"></i></button>
+    <td class="editCell" *ngIf="employee.isEdit; else isNotEditMode">
+        <button id="saveBtn" type="button"  class="btn" (click)="onSave(employee)"> Save </button>
+        <button id="closeBtn" type="button" class="btn" (click)="onCancel(employee)"><i class="fa fa-close"></i></button>
     </td>
     <ng-template #isNotEditMode>
       <td>
@@ -39,3 +48,7 @@
     </ng-template>
   </tr>
 </table>
+
+<br>
+
+<app-total-time-worked-pie-chart [inputEmployees]="this.employees"></app-total-time-worked-pie-chart>

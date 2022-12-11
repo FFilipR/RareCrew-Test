@@ -1,0 +1,12 @@
+.chart-container {
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+}
+
+.canvas {
+  margin: auto;
+  width: 30%;
+}

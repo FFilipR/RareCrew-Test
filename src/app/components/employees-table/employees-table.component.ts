@@ -10,19 +10,18 @@ import {cloneDeep} from 'lodash';
 })
 export class EmployeesTableComponent implements OnInit
 {
+  employees: Employee[];
+  originalEmployees: Employee[];
 
-  employees: any[];
-  originalEmployees: Employee[] = [];
+  constructor(private employeeService: EmployeeService) {}
 
-  constructor(private employeeService: EmployeeService) {
-  }
 
   ngOnInit(): void
   {
     this.loadEmployees();
   }
 
-  private loadEmployees()
+  private loadEmployees(): void
   {
     this.employeeService.getAllEmployees().subscribe((employees) =>
     {
@@ -37,9 +36,9 @@ export class EmployeesTableComponent implements OnInit
     })
   }
 
-   onEdit(item: any)
+   onEdit(item: any): void
    {
-    // only one element can be edited at the time
+      // only one element can be edited at the time
     this.employees.forEach(employee =>
     {
       employee.isEdit = false;
@@ -50,7 +49,7 @@ export class EmployeesTableComponent implements OnInit
      item.isEdit = true;
    }
 
-  onSave(employee: Employee)
+  onSave(employee: Employee): void
   {
     let index = this.employees.findIndex(obj => obj.EmployeeName == employee.EmployeeName);
 
@@ -62,7 +61,7 @@ export class EmployeesTableComponent implements OnInit
     employee.isEdit = false;
   }
 
-  onCancel(employee: any)
+  onCancel(employee: any): void
   {
     this.employees = this.originalEmployees;
     employee.isEdit = false;
@@ -102,4 +101,5 @@ export class EmployeesTableComponent implements OnInit
      }  as Employee
    })
   }
+
 }

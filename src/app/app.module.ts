@@ -7,11 +7,13 @@ import { EmployeesTableComponent } from './components/employees-table/employees-
 import { HttpClientModule} from "@angular/common/http";
 import { EmployeeService} from "./services/employee.service";
 import {FormsModule} from "@angular/forms";
+import { TotalTimeWorkedPieChartComponent } from './components/total-time-worked-pie-chart/total-time-worked-pie-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeesTableComponent,
+    TotalTimeWorkedPieChartComponent,
   ],
     imports: [
         BrowserModule,
